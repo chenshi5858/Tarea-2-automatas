@@ -1,5 +1,5 @@
-
-with open('nfa4.txt', 'r') as file:
+entrada = input("Ingrese direccion del archivo que contiene al automata: ")
+with open(entrada, 'r') as file:
     automata = file.readlines()
 ########################################EXTRACCIÓN DE DATOS##################################################
 estados = []
@@ -38,31 +38,93 @@ for line in automata:
 for line in automata:
     transiciones.append(((line[0], line[2]), line[7]))
 
-# print(alfabeto)
-# print(estado_inicial)
-# print(estados)
-# print(estados_finales)
-# print(transiciones)
+# print("alfabeto: ",alfabeto)
+# print("estado_inicial: ",estado_inicial)
+# print("estados: ", estados)
+# print("estados_finales: ",estados_finales)
+# print("transiciones: ",transiciones)
 ###########################################FORMAR LOS ESTADOS FINALES####################################################
-estados_finales = []
+estados_DFA = [[estado_inicial]]
 
 for camino in alfabeto:
-    ...
+    estado = []
+    for transicion in transiciones:
+        if transicion[0] == (estado_inicial, camino):
+            estado.append(transicion[1])
+    if estado not in estados_DFA:
+        estados_DFA.append(estado)
+print(estados_DFA)
 
-# for transicion_1 in transiciones:
-#     estado=[]
-#     if transicion_1[1] not in estado:
-#         estado.append(transicion_1[1])
+#este for sirve para sacar los estados de DFA
+for estado in estados_DFA:
+    #dic[str(estado)] = []
+    for camino in alfabeto:
+        tupla = []
+        for sub_estado in estado:
+            for transicion in transiciones:
+                if transicion[0] == (sub_estado, camino):
+                    tupla.append(transicion[1])
+            if tupla not in estados_DFA:
+                estados_DFA.append(tupla)
+            #dic[str(estado)].append(tuple(tupla))
 
-#     for transicion_2 in transiciones:
-#         if transicion_1[0] == transicion_2[0] and (transicion_2[1] not in estado):
-#             estado.append(transicion_2[1])
+dic = {}
+#esto es para evaluar a donde va cada estado del DFA
+for camino in alfabeto:
+    for estado in estados_DFA:
+        if str(estado) not in dic:
+            dic[str(estado)] = []
+        estado_dfa = []
+        for mini_estado in estado:
+            for transicion in transiciones:
+                if transicion[0] == (mini_estado, camino) and (transicion[1] not in estado_dfa):
+                    estado_dfa.append(transicion[1])
+        dic[str(estado)].append(tuple(estado_dfa))
 
-#     if estado not in estados_finales:
-#         estados_finales.append(estado)
 
-# print(estados_finales)
 
+# print(transiciones,"\n\n\n")
+# print(dic)
+salida = input("Ingrese el nombre con el que quiere guardar el archivo que contiene al DFA (debe agregar la extension): ")
+archivo_DFA = open(salida, 'w')
+
+archivo_DFA.write("Estados\n")
+final_e_inicial=False
+final = False
+
+for estado in estados_DFA:
+    if estado_inicial == (str(estado)[2:-2]):
+        
+        for estado_final in estados_finales:
+            if estado_final in estado:
+                archivo_DFA.write("*"+">" + str(estado).replace('\'','').replace('[', '{').replace(']', '}').replace(",}", "}")+"\n")
+                final_e_inicial = True
+                break
+        if not final_e_inicial:
+            archivo_DFA.write(">" + str(estado).replace('\'','').replace('[', '{').replace(']', '}').replace(",}", "}")+"\n")
+        continue
+    for estado_final in estados_finales:
+        if estado_final in estado:
+            archivo_DFA.write("*"+ str(estado).replace('\'','').replace('[', '{').replace(']', '}').replace(",}", "}")+"\n")
+            final = True
+            break
+    if not final:
+        archivo_DFA.write(str(estado).replace('\'','').replace('[', '{').replace(']', '}').replace(",}", "}")+"\n")
+
+
+archivo_DFA.write("Alfabeto\n")
+
+for camino in alfabeto:
+    archivo_DFA.write(camino+"\n")
+
+archivo_DFA.write("Transiciones\n")
+
+for key, value in dic.items():
+    for i in range(len(value)):
+        archivo_DFA.write(f'{key.replace('\'','').replace('[', '{').replace(']', '}').replace(",}", "}")} {i} -> {str(value[i]).replace('\'','').replace('(', '{').replace(')', '}').replace(",}", "}")}\n')
+
+
+archivo_DFA.close()
 
     
-
+    

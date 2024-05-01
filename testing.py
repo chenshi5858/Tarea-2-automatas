@@ -1,4 +1,3 @@
-hola= ["hola", "como", "estas"]
-hola_copia = hola
-hola.remove("hola")
-print(hola_copia)
+hola = "hola como estas"
+
+print(hola[1:-1])

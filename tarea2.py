@@ -53,7 +53,7 @@ for camino in alfabeto:
             estado.append(transicion[1])
     if estado not in estados_DFA:
         estados_DFA.append(estado)
-print(estados_DFA)
+
 
 #este for sirve para sacar los estados de DFA
 for estado in estados_DFA:
@@ -62,7 +62,7 @@ for estado in estados_DFA:
         tupla = []
         for sub_estado in estado:
             for transicion in transiciones:
-                if transicion[0] == (sub_estado, camino):
+                if transicion[0] == (sub_estado, camino) and (transicion[1] not in tupla):
                     tupla.append(transicion[1])
             if tupla not in estados_DFA:
                 estados_DFA.append(tupla)
@@ -80,8 +80,6 @@ for camino in alfabeto:
                 if transicion[0] == (mini_estado, camino) and (transicion[1] not in estado_dfa):
                     estado_dfa.append(transicion[1])
         dic[str(estado)].append(tuple(estado_dfa))
-
-
 
 # print(transiciones,"\n\n\n")
 # print(dic)
@@ -110,6 +108,7 @@ for estado in estados_DFA:
             break
     if not final:
         archivo_DFA.write(str(estado).replace('\'','').replace('[', '{').replace(']', '}').replace(",}", "}")+"\n")
+    final=False
 
 
 archivo_DFA.write("Alfabeto\n")

@@ -1,14 +1,16 @@
 Estados
 >A
 B
+D
 *C
 Alfabeto
 0
 1
 Transiciones
-A 0 -> AB
-A 1 -> C
-B 0 -> A
-B 1 -> B
-C 0 -> .
-c 1 -> AB
+A 0 -> A
+A 1 -> A
+A 1 -> B
+B 0 -> C
+B 0 -> D
+B 1 -> C
+D 1 -> D

@@ -1,0 +1,15 @@
+Estados
+>A
+B
+*C
+Alfabeto
+0
+1
+Transiciones
+A 0 -> A
+A 0 -> B
+A 1 -> C
+B 0 -> A
+B 1 -> B
+C 1 -> A
+C 1 -> B

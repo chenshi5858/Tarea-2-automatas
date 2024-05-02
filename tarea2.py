@@ -14,8 +14,13 @@ for line in automata:
         copia_automata.remove(line)
         continue
     if line[0] == ">":
-        estado_inicial = line[1]
-        estados.append(line[1])
+        if line[1]=="*":
+            estado_inicial = line[2]
+            estados_finales.append(line[2])
+            estados.append(line[2])
+        else:
+            estado_inicial = line[1]
+            estados.append(line[1])
     elif line[0] == "*":
         estados_finales.append(line[1])
         estados.append(line[1])
@@ -95,7 +100,7 @@ for estado in estados_DFA:
         
         for estado_final in estados_finales:
             if estado_final in estado:
-                archivo_DFA.write("*"+">" + str(estado).replace('\'','').replace('[', '{').replace(']', '}').replace(",}", "}")+"\n")
+                archivo_DFA.write(">"+"*" + str(estado).replace('\'','').replace('[', '{').replace(']', '}').replace(",}", "}")+"\n")
                 final_e_inicial = True
                 break
         if not final_e_inicial:
